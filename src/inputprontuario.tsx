@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, TouchableOpacity, ActivityIndicator, PermissionsAndroid, Platform, Modal } from 'react-native';
 import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
 import Geolocation from '@react-native-community/geolocation'; // Importando a geolocalização
-import { supabase } from './services/supabase'; // Importando o cliente Supabase
+import { supabase } from '../services/supabase'; // Importando o cliente Supabase
 import { WebView } from 'react-native-webview'; // Importando o WebView para exibir o mapa no Modal
 
 const InputProntuario = () => {

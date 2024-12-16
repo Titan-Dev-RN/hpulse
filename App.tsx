@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import NfcManager, { NfcTech, Ndef, NfcEvents } from 'react-native-nfc-manager';
 //import { supabase } from './services/supabase'; // Importando o cliente Supabase
-import Prontuario from './prontuário';
-import Login from './login';
-import Cadastro from './cadastro';
+import Prontuario from './src/prontuário';
+import Login from './src/login';
+import Cadastro from './src/cadastro';
 
 
 const Stack = createNativeStackNavigator();

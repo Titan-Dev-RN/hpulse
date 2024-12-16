@@ -1,49 +1,31 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { supabase } from './services/supabase'; // Certifique-se de que o cliente Supabase está configurado corretamente
-import Login from './login';
+import { supabase } from '../services/supabase'; // Importando o cliente Supabase
 
-const Cadastro = () => {
+const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation(); // Hook para acessar a navegação
 
-    const [usersData, setUsersData] = useState({
-        email: '',
-        senha: '',
-    });
-
-    // Função de cadastro e navegação
-    const handleCadastro = async () => {
+    const handleLogin = async () => {
         if (username && password) {
-            try {
-                // Insere o usuário no banco de dados Supabase
-                const { data, error } = await supabase
-                    .from('users')
-                    .insert([{ email: username, senha: password }]);
+            // Verifica as credenciais no Supabase
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', username)
+                .eq('senha', password);
 
-                if (error) {
-                    Alert.alert('Erro', 'Falha ao salvar o cadastro.');
-                    console.error('Erro ao salvar:', error);
-                } else {
-                    Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
-                    setUsername('');
-                    setPassword('');
-                    navigation.navigate('login'); // Redireciona para a tela de prontuário
-                }
-            } catch (ex) {
-                console.error('Erro durante o cadastro:', ex);
-                Alert.alert('Erro', 'Ocorreu um erro durante o cadastro.');
+            if (error || data.length === 0) {
+                Alert.alert('Erro', 'Usuário ou senha incorretos');
+            } else {
+                Alert.alert('Sucesso', 'Login realizado com sucesso!');
+                navigation.navigate('Prontuario'); // Redireciona para a tela de prontuário
             }
         } else {
             Alert.alert('Erro', 'Por favor, preencha todos os campos.');
         }
-    };
-
-    // Função de atualização dos campos de entrada
-    const handleInputChange = (field, value) => {
-        setUsersData({ ...usersData, [field]: value });
     };
 
     return (
@@ -53,9 +35,8 @@ const Cadastro = () => {
                 source={require('./img/H-Pulse.jpg')}
                 style={{ width: 350, height: 70, marginLeft: 20, marginBottom: 50 }}  
             />
-
-
-            <Text style={styles.title}>Cadastro</Text>
+    
+            <Text style={styles.title}>Login</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Nome de Usuário"
@@ -71,14 +52,13 @@ const Cadastro = () => {
                 value={password}
                 onChangeText={setPassword}
             />
-            <Button title="Cadastre-se" onPress={handleCadastro} />
+            <Button title="Entrar" onPress={handleLogin} />
             <Text style={styles.registerText}>
-                Tem uma conta?{' '}
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.link}>Faça o Login aqui</Text>
+                Não tem uma conta?{' '}
+                <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
+                    <Text style={styles.link}>Registre-se aqui</Text>
                 </TouchableOpacity>
             </Text>
-
         </View>
     );
 };
@@ -115,4 +95,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Cadastro;
+export default Login;
